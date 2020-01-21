@@ -1,0 +1,8 @@
+import math
+st_lat=26.48
+st_long=74.63
+ev_lat=27.9097
+ev_long=85.5004
+distance=(math.sqrt((st_lat-ev_lat)**2+(st_long-ev_long)**2))*110
+time=distance/6.5
+print(time)
