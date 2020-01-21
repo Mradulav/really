@@ -1,0 +1,40 @@
+from __future__ import print_function
+import obspy
+from obspy import read
+st=read(r"C:\Users\PGUSER\Documents\Mradula\NEPAL_EQ_PROCESSING_GUW\Nepal_2015-04-25T06_56_37_6.0M\2015-04-25-0653-31S.guw___003")
+print(st)
+st.plot()
+#print(st.stats)
+
+st=read(r"C:\Users\PGUSER\Documents\Mradula\NEPAL_EQ_PROCESSING_GUW\Nepal_2015-04-25T06_56_37_6.0M\2015-04-25-0653-31S.guw___003")
+
+#stts=st.stats
+#stats.sampling_rate
+for tr in st.select(component="E"):
+    siltE = tr.copy()
+E_decimate=siltE.decimate(factor=4,strict_length=False)
+E_filt=siltE.filter('highpass',freq=0.15,corners=6)
+E_filt1=E_decimate.filter('highpass',freq=0.0000002,corners=6)
+t = np.arange(0, len(siltE))
+t_new=np.arange(0,len(E_decimate))
+plt.plot( t,siltE, 'k', label='Raw', alpha=0.3)
+plt.plot( t,E_filt, 'b', label='Highpassed', alpha=0.7)
+plt.plot(t_new, E_filt1, 'r', label='Highpassed/Downsampled', alpha=0.7)
+plt.xlabel('Time [s]')
+plt.xlim(900,10000)
+#plt.suptitle(tr.stats.starttime)
+plt.legend()
+plt.show()
+for tr in st.select(component="E"):
+    tr=siltE.copy()
+    tr.write('GUW.GUW_____3_GUWA__GU_E_SAC', format='SAC') 
+print(tr)
+tr.plot()
+
+import numpy as np
+import matplotlib.pyplot as plt
+import array as arr 
+y=np.fft.fft(E_filt1)
+f = np.arange(10/18939,20,10/18939)
+plt.plot(f,y)
+plt.xlim(0,1)
